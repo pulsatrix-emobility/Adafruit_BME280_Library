@@ -116,9 +116,18 @@ bool Adafruit_BME280::init() {
   // wait for chip to wake up.
   delay(10);
 
+  // Store current time to measure the timeout
+  uint32_t timeout_start = millis();
   // if chip is still reading calibration, delay
-  while (isReadingCalibration())
+  // or the timeout occurred after 2 sec.
+  while (isReadingCalibration()) {
+    // In case of a timeout, stop the while loop
+    if ((millis() - timeout_start) > 2000) {
+      return false;
+      break;
+    }
     delay(10);
+  }
 
   readCoefficients(); // read trimming parameters, see DS 4.2.2
 
