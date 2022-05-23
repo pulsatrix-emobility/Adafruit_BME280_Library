@@ -299,7 +299,7 @@ bool Adafruit_BME280::takeForcedMeasurement(void) {
         return_value = false;
         break;
       }
-      delay(1);
+      delay(10);
     }
   }
   return return_value;
